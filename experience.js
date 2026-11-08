@@ -13,29 +13,18 @@ if (!reduceMotion.matches && canObserve) {
 }
 
 const welcome = document.querySelector('#welcome');
-const sound = document.querySelector('#sound');
-if (welcome && sound) {
-  sound.hidden = false;
-  sound.addEventListener('click', () => {
-    const turnOn = welcome.muted || welcome.volume === 0;
-    if (turnOn && welcome.volume === 0) welcome.volume = 1;
-    welcome.muted = !turnOn;
-    if (turnOn) {
-      if (welcome.ended) welcome.currentTime = 0;
-      welcome.play().catch(() => {});
-    }
-  });
-  welcome.addEventListener('volumechange', () => {
-    sound.textContent = welcome.muted || welcome.volume === 0 ? 'Uključite zvuk' : 'Isključite zvuk';
-  });
-  if (!reduceMotion.matches && canObserve) {
-    const autoplay = new IntersectionObserver(entries => {
-      if (!entries.some(entry => entry.isIntersecting)) return;
-      autoplay.disconnect();
-      welcome.play().catch(() => {});
-    }, { threshold: .25 });
-    autoplay.observe(welcome);
-  }
+if (welcome) {
+  let started = false;
+  const startWelcome = event => {
+    if (started || event?.target === welcome) return;
+    welcome.play().catch(() => {});
+  };
+  welcome.addEventListener('playing', () => {
+    started = true;
+    document.removeEventListener('click', startWelcome, true);
+  }, { once: true });
+  document.addEventListener('click', startWelcome, true);
+  startWelcome();
 }
 
 const note = document.querySelector('#scroll-note');
