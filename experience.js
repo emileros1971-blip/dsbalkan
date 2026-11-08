@@ -29,10 +29,13 @@ if (welcome) {
 
 const note = document.querySelector('#scroll-note');
 if (note) {
+  const title = document.createElement('span');
+  title.className = 'scroll-note-title';
+  note.append(title);
   const milestones = [
-    [() => 70, 'Hvala što ste nas posetili!'],
-    [() => document.querySelector('#standard').offsetTop - innerHeight * .45, 'Vaš pouzdan izbor za čišćenje'],
-    [() => document.querySelector('#recenzije').offsetTop - innerHeight * .6, '★★★★★  Odlične ocene na Google-u'],
+    [() => 70, 'Hvala što ste\nnas posetili!'],
+    [() => document.querySelector('#standard').offsetTop - innerHeight * .45, 'Vaš pouzdan izbor\nza čišćenje'],
+    [() => document.querySelector('#recenzije').offsetTop - innerHeight * .6, '★★★★★\nOdlične ocene\nna Google-u'],
   ];
   let next = 0;
   let active = false;
@@ -42,7 +45,7 @@ if (note) {
     if (scrollY < Math.max(70, threshold())) return;
     next += 1;
     active = true;
-    note.textContent = message;
+    title.textContent = message;
     note.classList.add('show');
     setTimeout(() => {
       note.classList.remove('show');
@@ -50,7 +53,7 @@ if (note) {
         active = false;
         showNextNote();
       }, 180);
-    }, 2150);
+    }, 3400);
   }
   addEventListener('scroll', showNextNote, { passive: true });
 }

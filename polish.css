@@ -76,9 +76,70 @@ main h1::after {content:"";display:block;width:min(42%,240px);height:3px;margin-
 .wa {background:#127046}
 .vb {background:#6343a0}
 .messengers a:hover {filter:brightness(1.15)}
-.scroll-note {pointer-events:none;position:fixed;z-index:65;left:50%;bottom:max(74px,12vh);width:max-content;max-width:calc(100% - 60px);padding:10px 22px;color:#fff;background:rgba(13,38,68,.78);backdrop-filter:blur(14px) saturate(125%);border:1px solid #9bd7ff99;box-shadow:0 10px 35px #12294330;border-radius:999px;font-weight:750;text-align:center;opacity:0;transform:translate(-50%,15px)}
-.scroll-note.show {animation:glass-note 2.15s ease both}
-@keyframes glass-note {0%{opacity:0;transform:translate(-50%,15px) scale(.96);filter:blur(5px)} 16%,80%{opacity:1;transform:translate(-50%,0) scale(1);filter:blur(0)} 100%{opacity:0;transform:translate(-50%,-8px);filter:blur(4px)}}
+.scroll-note {
+  --mist-duration:3.4s;
+  position:fixed;
+  inset:0;
+  z-index:65;
+  display:grid;
+  place-items:center;
+  isolation:isolate;
+  overflow:hidden;
+  pointer-events:none;
+  visibility:hidden;
+  text-align:center;
+  color:#f8faff;
+}
+.scroll-note.show {visibility:visible}
+.scroll-note::before,.scroll-note::after {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  opacity:0;
+}
+.scroll-note::before {
+  inset:0;
+  background:radial-gradient(ellipse at center,#08182de8 0%,#08182dc7 36%,#08182d4d 71%,transparent 100%);
+}
+.scroll-note::after {
+  inset:-10% -12%;
+  background:
+    radial-gradient(ellipse 26% 11% at 34% 43%,#a9d6f480,transparent 80%),
+    radial-gradient(ellipse 25% 15% at 63% 53%,#7db3df94,transparent 82%),
+    radial-gradient(ellipse 28% 10% at 45% 58%,#b8e0fa80,transparent 82%),
+    radial-gradient(ellipse 21% 12% at 66% 42%,#d6eeff73,transparent 76%);
+  filter:blur(20px);
+}
+.scroll-note-title {
+  width:100%;
+  max-width:20ch;
+  padding-inline:16px;
+  font:700 clamp(2rem,8.4vw,7rem)/1.02 var(--naslov-uski);
+  letter-spacing:-.025em;
+  white-space:pre-line;
+  overflow-wrap:break-word;
+  text-shadow:0 3px 24px #071a30ba;
+  opacity:0;
+}
+.scroll-note.show::before {animation:mist-shade var(--mist-duration) ease both}
+.scroll-note.show::after {animation:mist-drift var(--mist-duration) ease both}
+.scroll-note.show .scroll-note-title {animation:mist-title var(--mist-duration) ease both}
+@keyframes mist-shade {
+  0%,100% {opacity:0}
+  22%,70% {opacity:1}
+}
+@keyframes mist-drift {
+  0% {opacity:0;transform:translate(-8%,5%) scale(.84)}
+  18% {opacity:.9}
+  36%,61% {opacity:.35;transform:translate(0,0) scale(1)}
+  77% {opacity:.86}
+  100% {opacity:0;transform:translate(9%,-6%) scale(1.26)}
+}
+@keyframes mist-title {
+  0%,6% {opacity:0;filter:blur(24px);transform:translateY(14px) scale(.96)}
+  29%,62% {opacity:1;filter:blur(0);transform:none}
+  93%,100% {opacity:0;filter:blur(27px);transform:translateY(-15px) scale(1.05)}
+}
 .headline-in:not(.hero-copy h1),.hero-copy h1.headline-in span {animation:headline-in .72s cubic-bezier(.2,.7,.2,1) both}
 .hero-copy h1.headline-in span + span {animation-delay:.13s}
 main h1.headline-in::after {animation:headline-accent .76s .26s cubic-bezier(.2,.7,.2,1) both}
@@ -97,7 +158,7 @@ main h1.headline-in::after {animation:headline-accent .76s .26s cubic-bezier(.2,
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
   .otkrij{opacity:1!important;transform:none!important}
-  .scroll-note.show{opacity:1;transform:translate(-50%,0)}
+  .scroll-note.show::before,.scroll-note.show .scroll-note-title{opacity:1}
 }
 .pill [aria-hidden="true"]{font-family:system-ui,sans-serif}
 .usluga-karta:focus-visible{outline-offset:2px}
