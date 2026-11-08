@@ -35,7 +35,6 @@ if (note) {
   const milestones = [
     [() => 70, 'Hvala što ste\nnas posetili!'],
     [() => document.querySelector('#standard').offsetTop - innerHeight * .45, 'Vaš pouzdan izbor\nza čišćenje'],
-    [() => document.querySelector('#recenzije').offsetTop - innerHeight * .6, '★★★★★\nOdlične ocene\nna Google-u'],
   ];
   let next = 0;
   let active = false;
