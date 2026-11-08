@@ -77,7 +77,7 @@ main h1::after {content:"";display:block;width:min(42%,240px);height:3px;margin-
 .vb {background:#6343a0}
 .messengers a:hover {filter:brightness(1.15)}
 .scroll-note {
-  --mist-duration:3.4s;
+  --mist-duration:.85s;
   position:fixed;
   inset:0;
   z-index:65;
@@ -99,7 +99,7 @@ main h1::after {content:"";display:block;width:min(42%,240px);height:3px;margin-
 }
 .scroll-note::before {
   inset:0;
-  background:radial-gradient(ellipse at center,#08182de8 0%,#08182dc7 36%,#08182d4d 71%,transparent 100%);
+  background:radial-gradient(ellipse at center,#08182d8c 0%,#08182d55 36%,#08182d1a 71%,transparent 100%);
 }
 .scroll-note::after {
   inset:-10% -12%;
@@ -126,18 +126,18 @@ main h1::after {content:"";display:block;width:min(42%,240px);height:3px;margin-
 .scroll-note.show .scroll-note-title {animation:mist-title var(--mist-duration) ease both}
 @keyframes mist-shade {
   0%,100% {opacity:0}
-  22%,70% {opacity:1}
+  16%,60% {opacity:1}
 }
 @keyframes mist-drift {
   0% {opacity:0;transform:translate(-8%,5%) scale(.84)}
-  18% {opacity:.9}
+  18% {opacity:.63}
   36%,61% {opacity:.35;transform:translate(0,0) scale(1)}
-  77% {opacity:.86}
+  77% {opacity:.56}
   100% {opacity:0;transform:translate(9%,-6%) scale(1.26)}
 }
 @keyframes mist-title {
   0%,6% {opacity:0;filter:blur(24px);transform:translateY(14px) scale(.96)}
-  29%,62% {opacity:1;filter:blur(0);transform:none}
+  17%,66% {opacity:1;filter:blur(0);transform:none}
   93%,100% {opacity:0;filter:blur(27px);transform:translateY(-15px) scale(1.05)}
 }
 .headline-in:not(.hero-copy h1),.hero-copy h1.headline-in span {animation:headline-in .72s cubic-bezier(.2,.7,.2,1) both}

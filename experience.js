@@ -53,7 +53,7 @@ if (note) {
         active = false;
         showNextNote();
       }, 180);
-    }, 3400);
+    }, 850);
   }
   addEventListener('scroll', showNextNote, { passive: true });
 }
