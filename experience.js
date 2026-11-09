@@ -14,6 +14,13 @@ if (!reduceMotion.matches && canObserve) {
 
 const welcome = document.querySelector('#welcome');
 if (welcome) {
+  const soundKey = 'dsbalkan:welcome-sound';
+  try {
+    welcome.muted = localStorage.getItem(soundKey) !== 'on';
+  } catch {
+    // Keep the HTML default if storage is unavailable.
+  }
+
   let started = false;
   const startWelcome = event => {
     if (started || event?.target === welcome) return;
@@ -24,7 +31,32 @@ if (welcome) {
     document.removeEventListener('click', startWelcome, true);
   }, { once: true });
   document.addEventListener('click', startWelcome, true);
-  startWelcome();
+  const rememberSound = () => {
+    let muted = welcome.muted;
+    let volume = welcome.volume;
+    welcome.addEventListener('volumechange', () => {
+      if (muted === welcome.muted && volume === welcome.volume) return;
+      muted = welcome.muted;
+      volume = welcome.volume;
+      try {
+        localStorage.setItem(soundKey, muted || volume === 0 ? 'off' : 'on');
+      } catch {
+        // Native controls still work without storage.
+      }
+    });
+  };
+
+  if (welcome.muted) {
+    rememberSound();
+    startWelcome();
+  } else {
+    welcome.play().then(rememberSound, () => {
+      // A browser may require a fresh gesture before allowing sound.
+      welcome.muted = true;
+      rememberSound();
+      welcome.play().catch(() => {});
+    });
+  }
 }
 
 const note = document.querySelector('#scroll-note');
