@@ -14,49 +14,52 @@ if (!reduceMotion.matches && canObserve) {
 
 const welcome = document.querySelector('#welcome');
 if (welcome) {
+  const soundButton = document.querySelector('.welcome-sound');
   const soundKey = 'dsbalkan:welcome-sound';
+  const hasSound = () => !welcome.muted && welcome.volume > 0;
+  let preference;
   try {
-    welcome.muted = localStorage.getItem(soundKey) !== 'on';
+    preference = localStorage.getItem(soundKey);
   } catch {
-    // Keep the HTML default if storage is unavailable.
+    // Playback and the sound button still work without storage.
   }
 
-  let started = false;
-  const startWelcome = event => {
-    if (started || event?.target === welcome) return;
+  let sound = hasSound();
+  function syncSoundButton() {
+    if (soundButton) soundButton.hidden = hasSound();
+  }
+
+  function setMuted(muted) {
+    welcome.muted = muted;
+    sound = hasSound();
+    syncSoundButton();
+  }
+
+  welcome.addEventListener('volumechange', () => {
+    if (sound === hasSound()) return;
+    sound = hasSound();
+    syncSoundButton();
+    try {
+      localStorage.setItem(soundKey, sound ? 'on' : 'off');
+    } catch {
+      // The visitor can still use the video controls.
+    }
+  });
+
+  soundButton?.addEventListener('click', () => {
+    if (welcome.volume === 0) welcome.volume = 1;
+    welcome.muted = false;
+    welcome.currentTime = 0;
+    welcome.play().then(() => {
+      if (document.activeElement === soundButton) welcome.focus();
+    }, () => setMuted(true));
+  });
+
+  setMuted(preference === 'off');
+  welcome.play().catch(() => {
+    setMuted(true);
     welcome.play().catch(() => {});
-  };
-  welcome.addEventListener('playing', () => {
-    started = true;
-    document.removeEventListener('click', startWelcome, true);
-  }, { once: true });
-  document.addEventListener('click', startWelcome, true);
-  const rememberSound = () => {
-    let muted = welcome.muted;
-    let volume = welcome.volume;
-    welcome.addEventListener('volumechange', () => {
-      if (muted === welcome.muted && volume === welcome.volume) return;
-      muted = welcome.muted;
-      volume = welcome.volume;
-      try {
-        localStorage.setItem(soundKey, muted || volume === 0 ? 'off' : 'on');
-      } catch {
-        // Native controls still work without storage.
-      }
-    });
-  };
-
-  if (welcome.muted) {
-    rememberSound();
-    startWelcome();
-  } else {
-    welcome.play().then(rememberSound, () => {
-      // A browser may require a fresh gesture before allowing sound.
-      welcome.muted = true;
-      rememberSound();
-      welcome.play().catch(() => {});
-    });
-  }
+  });
 }
 
 const note = document.querySelector('#scroll-note');
