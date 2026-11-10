@@ -37,7 +37,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .hero-copy h1 span + span {color:#0965ad}
 main h1 {position:relative}
 main h1::after {content:"";display:block;width:min(42%,240px);height:3px;margin-top:14px;border-radius:3px;background:#c39a55;transform-origin:left}
-.hero-copy .intro {max-width:42ch;color:#495f70;margin-bottom:20px}
+.hero-copy .intro {max-width:42ch;color:var(--tekst);font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.35;font-weight:800;margin-bottom:8px}
+.hero-copy .intro-detalj {max-width:42ch;color:#495f70;font-weight:700;margin-bottom:20px}
 .eyebrow {display:flex;gap:9px;align-items:center;font-size:11px;letter-spacing:.15em;font-weight:800;color:#275d87}
 .eyebrow>span {width:17px;height:2px;background:#a77943;display:inline-block}
 .pill {display:inline-flex;align-items:center;justify-content:center;gap:12px;border:1px solid transparent;border-radius:999px;padding:11px 18px;font-size:.86rem;font-weight:750;line-height:1.35}
