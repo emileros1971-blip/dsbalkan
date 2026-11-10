@@ -13,24 +13,53 @@ if (!reduceMotion.matches && canObserve) {
 }
 
 const welcome = document.querySelector('#welcome');
-const soundButton = document.querySelector('.welcome-sound');
-if (welcome && soundButton) {
-  function syncSoundButton() {
-    const hide = !welcome.paused && !welcome.ended && !welcome.muted && welcome.volume > 0;
-    if (hide && document.activeElement === soundButton) welcome.focus();
-    soundButton.hidden = hide;
+if (welcome) {
+  const soundButton = document.querySelector('.welcome-sound');
+  const soundKey = 'dsbalkan:welcome-sound';
+  const hasSound = () => !welcome.muted && welcome.volume > 0;
+  let preference;
+  try {
+    preference = localStorage.getItem(soundKey);
+  } catch {
+    // Playback and the sound button still work without storage.
   }
 
-  for (const event of ['playing', 'pause', 'ended', 'volumechange']) {
-    welcome.addEventListener(event, syncSoundButton);
+  let sound = hasSound();
+  function syncSoundButton() {
+    if (soundButton) soundButton.hidden = hasSound();
   }
-  soundButton.addEventListener('click', () => {
-    welcome.muted = false;
-    if (welcome.volume === 0) welcome.volume = 1;
-    welcome.currentTime = 0;
-    welcome.play().catch(syncSoundButton);
+
+  function setMuted(muted) {
+    welcome.muted = muted;
+    sound = hasSound();
+    syncSoundButton();
+  }
+
+  welcome.addEventListener('volumechange', () => {
+    if (sound === hasSound()) return;
+    sound = hasSound();
+    syncSoundButton();
+    try {
+      localStorage.setItem(soundKey, sound ? 'on' : 'off');
+    } catch {
+      // The visitor can still use the video controls.
+    }
   });
-  syncSoundButton();
+
+  soundButton?.addEventListener('click', () => {
+    if (welcome.volume === 0) welcome.volume = 1;
+    welcome.muted = false;
+    welcome.currentTime = 0;
+    welcome.play().then(() => {
+      if (document.activeElement === soundButton) welcome.focus();
+    }, () => setMuted(true));
+  });
+
+  setMuted(preference === 'off');
+  welcome.play().catch(() => {
+    setMuted(true);
+    welcome.play().catch(() => {});
+  });
 }
 
 const note = document.querySelector('#scroll-note');
