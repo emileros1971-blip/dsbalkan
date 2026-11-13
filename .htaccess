@@ -1,0 +1,7 @@
+# Legacy URLs used in Google Ads and existing links
+RewriteEngine On
+RewriteRule ^ciscenje-posle-(gradevinskih|gradjevinskih)-radova/?$ /usluge/ciscenje-posle-gradjevinskih-radova/ [R=301,L]
+RewriteRule ^profesionalno-ciscenje-stanova/?$ /usluge/ciscenje-stanova/ [R=301,L]
+RewriteRule ^ciscenje-i-odrzavanje-poslovnih-prostora/?$ /usluge/ciscenje-kancelarija/ [R=301,L]
+RewriteRule ^ciscenje-stambenih-zgrada/?$ /usluge/odrzavanje-zgrada/ [R=301,L]
+RewriteRule ^kontakt/?$ / [R=301,L]
