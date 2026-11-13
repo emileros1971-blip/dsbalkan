@@ -613,7 +613,35 @@ h3.paket-naziv{font-size:1.24rem;line-height:1.28;margin-bottom:8px}
 .zaposljavanje-cta>*{min-width:0}
 .zaposljavanje-linkovi .dugme{max-width:100%;white-space:normal;text-align:center;overflow-wrap:anywhere}
 </style>
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="polish.css?v=readability"><script defer src="experience.js?v=welcome-audio"></script><noscript><style>.otkrij{opacity:1!important;transform:none!important}</style></noscript></head>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="polish.css?v=readability"><script defer src="experience.js?v=welcome-audio"></script><noscript><style>.otkrij{opacity:1!important;transform:none!important}</style></noscript>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LYE83ZQ4GT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { window.dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-LYE83ZQ4GT', {
+    allow_google_signals: false,
+    allow_ad_personalization_signals: false
+  });
+
+  document.addEventListener('click', function (event) {
+    const link = event.target.closest('a[href]');
+    if (!link) return;
+
+    const destination = new URL(link.href);
+    const channels = {
+      'tel:': 'phone',
+      'viber:': 'viber'
+    };
+    const channel = channels[destination.protocol] ||
+      (destination.hostname === 'wa.me' ? 'whatsapp' : '');
+    if (channel) {
+      gtag('event', channel + '_click', { send_to: 'G-LYE83ZQ4GT' });
+    }
+  });
+</script>
+</head>
 <body>
 <a class="skip-link" href="#main">Pređite na sadržaj</a><header class="glava pun" id="glava">
   <div class="omot">
@@ -1457,6 +1485,7 @@ h3.paket-naziv{font-size:1.24rem;line-height:1.28;margin-bottom:8px}
     .then(function(r){if(!r.ok)throw new Error('Slanje nije uspelo');return r.json();})
     .then(function(d){
       if(d.success === true || d.success === 'true'){
+        gtag('event', 'generate_lead', { send_to: 'G-LYE83ZQ4GT' });
         msg.style.display='block';msg.style.background='#d4edda';msg.style.color='#155724';
         msg.textContent='✓ Vaš upit je uspešno poslat! Javićemo vam se u najkraćem roku.';
         kf.reset();
